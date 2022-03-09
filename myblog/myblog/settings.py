@@ -27,6 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# 自定义验证
+# https://docs.djangoproject.com/zh-hans/3.2/topics/auth/customizing/
+AUTHENTICATION_BACKENDS = {
+    "users.views.MyBackend",
+}
+
 
 # Application definition
 
@@ -37,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users.apps.UsersConfig',
+    'blog.apps.BlogConfig'
 ]
 
 MIDDLEWARE = [
@@ -54,7 +62,7 @@ ROOT_URLCONF = 'myblog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,6 +70,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media'
             ],
         },
     },
@@ -78,8 +87,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'myblog',
         'USER': 'myblogApp',
-        'PASSWORD': '1111 123#',
-        'HOST': '1.117.234.26',
+        'PASSWORD': '',
+        'HOST': '',
         'PORT': '3306'
     }
 }
@@ -123,7 +132,20 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "media"
+
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# 发送邮件所需参数
+EMAIL_HOST = 'smtp.qq.com'  # 所使用的smtp服务器
+EMAIL_HOST_USER = 'huang.zyn@qq.com'    # 发件人邮箱
+EMAIL_HOST_PASSWORD = ''    # 密钥
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True    # 是否使用隐式的安全连接

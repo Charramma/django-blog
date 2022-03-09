@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>忘记密码</title>
+</head>
+
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div>
+            <label for="email_input">输入注册邮箱</label>
+            <input type="email" name="email" id="email_input">
+        </div>
+        {% if err_info %}
+            <p style="color: red;">{{ err_info }}</p>
+        {% elif msg %}
+            <p style="color:blue">{{ msg }}</p>
+        {% endif %}
+        <div>
+            <input type="submit" value="提交">
+        </div>
+    </form>
+</body>
+
+</html>
