@@ -87,8 +87,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'myblog',
         'USER': 'myblogApp',
-        'PASSWORD': '',
-        'HOST': '',
+        'PASSWORD': 'myblogApp123#',
+        'HOST': '127.0.0.1',
         'PORT': '3306'
     }
 }
@@ -146,6 +146,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 发送邮件所需参数
 EMAIL_HOST = 'smtp.qq.com'  # 所使用的smtp服务器
 EMAIL_HOST_USER = 'huang.zyn@qq.com'    # 发件人邮箱
-EMAIL_HOST_PASSWORD = ''    # 密钥
+EMAIL_HOST_PASSWORD = 'xhflqxclunjfbfha'    # 密钥
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True    # 是否使用隐式的安全连接

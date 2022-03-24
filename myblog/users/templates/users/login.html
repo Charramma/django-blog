@@ -1,21 +1,17 @@
-<!DOCTYPE html>
-{% load static %}
-<html>
+{% extends 'users/base.html' %}
 
-<head>
-    <title>登录</title>
-</head>
+{% block head %}
+<title>登录</title>
+{% endblock %}
 
-<body>
-    <div class="container">
-        <form action="" method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="提交">
-        </form>
-        <a href="{% url 'users:forget_pwd' %}">忘记密码</a>
-    </div>
+{% block content %}
 
-</body>
+    <form action="#", method="post">
+        <h1>登录</h1>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="登录">
+        <a href="{% url 'users:forget_pwd' %}"><span>忘记密码</span></a>
+    </form>
 
-</html>
+{% endblock %}

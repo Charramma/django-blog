@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width-device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="sie-edge" />
+    <link rel="stylesheet" type="text/css" href="{% static 'users/css/login.css' %}">
+
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body style="background-image: url({% static 'users/image/bg.png' %});">
+    <div class="container" id="container">
+        <div class="form-container sign-in-container">
+            {% block content %}
+
+            {% endblock%}
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,10 +1,226 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
+{% load static %}
 
-    </body>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心</title>
+
+    <!-- bulma -->
+    <link rel="stylesheet" href="{% static 'users/css/bulma.css' %}">
+    <!-- jquery -->
+    <script src="{% static 'users/js/jquery-3.6.0.min.js' %}"></script>
+    <!-- 使bulma下拉组件（Dropdown）生效的js文件 -->
+    <!-- <script src="{% static 'users/js/dropdown.js' %}"></script> -->
+
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="{% static 'users/css/style.css' %}">
+
+    <!-- 引入阿里图标库 -->
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_3273978_wzf0y88g7xg.css">
+</head>
+
+<body>
+    <!-- 头部导航 -->
+    <nav class="navbar" style="background-image: url({% static 'users/image/escheresque_@2X.png' %});">
+        <div class="container">
+            <!-- logo -->
+            <div class="navbar-brand">
+                <a href="\" class="navbar-item">
+                    <img src="{% static 'users/image/logo.png' %}" width="112" height="28" alt="logo">
+                </a>
+                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                    data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+            <!-- 头像、用户名及下拉菜单 -->
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <!-- 头像 -->
+                        <figure class="image is-24x24 mr-2">
+                            {% if user.userprofile.image %}
+                            <img class=" is-rounded" src="{{ MEDIA_URL }}{{ user.userprofile.image }}" alt="" srcset="">
+                            {% else %}
+                            <img class=" is-rounded" src="{% static 'users/image/default.png' %}" alt="" srcset="">
+                            {% endif %}
+                        </figure>
+                    </div>
+                    <!-- 用户名及下拉菜单 -->
+                    <div class="navbar-item ml-0 pl-0">
+                        <div class="dropdown is-hoverable">
+                            <div class="dropdown-trigger">
+                                <a>
+                                    {% if user.userprofile.nick_name %}
+                                    <span class="has-text-grey-dark is-size-5">{{ user.userprofile.nick_name }}</span>
+                                    {% else %}
+                                    <span class="has-text-grey-dark is-size-5">{{ user.username }}</span>
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="dropdown-menu" id="dropdown-menu2" role="menu">
+                                <div class="dropdown-content is-shadowless">
+                                    <div class="dropdown-item">
+                                        <a class="has-text-grey-dark" href="{% url 'blog:index' %}">
+                                            <span class="iconfont icon-home"></span>&nbsp;&nbsp;
+                                            博客主页
+                                        </a>
+                                    </div>
+                                    <div class="dropdown-item">
+                                        <a class=" has-text-grey-dark" href="">
+                                            <span class="iconfont icon-setup_fill"></span>&nbsp;&nbsp;
+                                            修改账户信息
+                                        </a>
+                                    </div>
+                                    <hr class="dropdown-divider">
+                                    <div class="dropdown-item">
+                                        <a class=" has-text-grey-dark" href="{% url 'users:logout' %}">
+                                            <span class="iconfont icon-undo"></span>&nbsp;&nbsp;
+                                            退出登录
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面主体 -->
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <!-- 左侧菜单 -->
+                <div class="column is-2">
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title">个人中心</p>
+                            <a href="" class="card-header-icon" aria-label="more options">
+                                <span class="iconfont icon-unfold"></span>
+                            </a>
+                        </header>
+                        <div class="card-content menu">
+                            <ul class="content menu-list">
+                                <li><a href="{% url 'users:user_profile' %}">个人信息</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title">内容管理</p>
+                            <a href="#" class="card-header-icon" aria-label="more options">
+                                <span class="iconfont icon-unfold"></span>
+                            </a>
+                        </header>
+                        <div class="card-content menu">
+                            <ul class="content menu-list">
+                                <li><a href="">添加文章</a></li>
+                                <li><a href="">已发布</a></li>
+                                <li><a href="">草稿箱</a></li>
+                                <li><a href="">评论管理</a></li>
+                                <li><a href="">数据分析</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 右侧显示用户信息部分 -->
+                <div class="column is-10">
+                    <div class="box is-radiusless is-shadowless">
+                        <div class="tabs">
+                            <ul>
+                                {% block title %}
+                                <li class="is-active"><a>账号信息</a></li>
+                                {% endblock %}
+                            </ul>
+                        </div>
+
+                        {% block content %}
+                        <div class="columns is-mobile" style="border-bottom: #ededed solid 1px; padding-bottom: 1rem">
+                            <div class="column is-narrow">
+                                <figure class="image is-96x96">
+
+                                    {% if user.userprofile.image %}
+                                    <img class="is-rounded" src="{{ MEDIA_URL }}{{ user.userprofile.image }}">
+                                    {% else %}
+                                    <!-- 如果没有关联对象，显示默认头像 -->
+                                    <img class="is-rounded" src=" {% static 'users/image/default.png' %}">
+                                    {% endif %}
+                                </figure>
+                            </div>
+                            <div class="column is-narrow">
+                                <div style="padding-top: 1.5rem;">
+
+                                    {% if user.userprofile.nickname %}
+                                    <h1 class="title is-size-4">{{ user.userprofile.nickname }}</h1>
+                                    {% else %}
+                                    <h1 class="title is-size-4">{{ user.username }}</h1>
+                                    {% endif %}
+
+
+                                    {% if user.userprofile.sign %}
+                                    <p class="subtitle is-size-6">{{ user.userprofile.sign }}</p>
+                                    {% else %}
+                                    <p class="subtitle is-size-6">这个人很懒，什么都没有写。。</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="columns" style="padding:1rem 0; ">
+                            <div class="column is-2">
+                                <p>个人信息</p>
+                            </div>
+                            <div class="column">
+                                <div class="columns is-mobile" style="border-bottom: #ededed solid 1px">
+                                    <div class="column is-2">
+                                        <span class=" has-text-grey-light">用户名</span>
+                                    </div>
+                                    <div class="column is-narrow">
+                                        <span class=" has-text-black-ter">{{ user.username }}</span>
+                                    </div>
+                                </div>
+                                <div class="columns is-mobile" style="border-bottom: #ededed solid 1px">
+                                    <div class="column is-2">
+                                        <span class=" has-text-grey-light">邮箱</span>
+                                    </div>
+                                    <div class="column is-narrow">
+                                        <span class=" has-text-black-ter">{{ user.email }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="columns" style="padding:1rem 0; ">
+                            <div class="column is-2">
+                                <p>个人简介</p>
+                            </div>
+                            <div class="column">
+                                <div class="content">
+                                    {% if user.userprofile.desc %}
+                                    {{ user.userprofile.desc }}
+                                    {% else %}
+                                    暂未设置
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </div>
+    </nav>
+</body>
+
 </html>

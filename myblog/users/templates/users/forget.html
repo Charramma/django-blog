@@ -1,26 +1,21 @@
-<!DOCTYPE html>
-<html>
+{% extends 'users/base.html' %}
 
-<head>
-    <title>忘记密码</title>
-</head>
+{% block head %}
+    <title>找回密码</title>
+{% endblock %}
 
-<body>
-    <form action="" method="post">
+
+{% block content %}
+    <form action="#" method="post">
         {% csrf_token %}
-        <div>
-            <label for="email_input">输入注册邮箱</label>
-            <input type="email" name="email" id="email_input">
-        </div>
+        <h1>找回密码</h1>
+        {{ form.as_p }}
+
         {% if err_info %}
             <p style="color: red;">{{ err_info }}</p>
         {% elif msg %}
-            <p style="color:blue">{{ msg }}</p>
+            <span>{{ msg }}</span>
         {% endif %}
-        <div>
-            <input type="submit" value="提交">
-        </div>
+        <input type="submit" value="提交">
     </form>
-</body>
-
-</html>
+{% endblock %}
