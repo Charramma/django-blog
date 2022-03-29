@@ -2,6 +2,8 @@ from django import forms
 
 from django.contrib.auth.models import User
 from users.models import UserProfile
+from django.core.exceptions import ValidationError
+
 
 class LoginForm(forms.Form):
     """ 登录表单 """
@@ -38,8 +40,8 @@ class ModifyPwdForm(forms.Form):
         super(ModifyPwdForm, self).__init__(auto_id=False, *args, **kwargs)
 
     password = forms.CharField(label='', min_length=5, widget=forms.PasswordInput(attrs={
-        'class': 'input',
-        'placeholder': '请输入新密码'
+                'class': 'input',
+                'placeholder': '请输入新密码'
     }))
     password2 = forms.CharField(label='', min_length=5, widget=forms.PasswordInput(attrs={
         'class': 'input',
@@ -48,7 +50,7 @@ class ModifyPwdForm(forms.Form):
 
     def clean_password2(self):
         """ 检查两次输入的密码是否一致 """
-        if self.cleaned_data['password'] != self.cleaned_data['password2']:
+        if self.cleaned_data['password2'] != self.cleaned_data['password']:
             raise forms.ValidationError("两次输入的密码不一致！")
         return self.cleaned_data['password']
 

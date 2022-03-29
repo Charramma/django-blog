@@ -71,11 +71,11 @@ def logout_view(request):
     return redirect('users:login')
 
 
-def reset_pwd(request, code):
+def reset_pwd(request, code=None):
     """ 重置密码 """
     record = EmailVerifyRecord.objects.get(code=code)
     # 判断是否在一个小时内点击链接
-    if timezone.now()-record.ge_date < datetime.timedelta(hours=1):
+    if code is not None and timezone.now()-record.ge_date < datetime.timedelta(hours=1):
         if request.method != 'POST':
             form = ModifyPwdForm()
             return render(request, 'users/reset_pwd.html', {'form': form})
@@ -88,7 +88,7 @@ def reset_pwd(request, code):
                 user.save()
                 return HttpResponse('密码修改成功！')
             else:
-                return HttpResponse('密码修改失败！')
+                return HttpResponse("密码修改失败！")
     else:
         return HttpResponse('链接超时！')
 
@@ -107,9 +107,7 @@ def reset_pwd_inner(request):
             user.save()
             return HttpResponse('密码修改成功！')
         else:
-            return HttpResponse('密码修改失败！')
-
-
+            return HttpResponse("密码修改失败！")
 
 
 # 如果没有登录，跳转到登录界面
@@ -118,6 +116,7 @@ def user_profile(request):
     """ 用户信息展示 """
     user = User.objects.get(username=request.user)
     return render(request, 'users/user_profile.html', {'user': user})
+
 
 @login_required(login_url='users:login')
 def editor_users(request):
