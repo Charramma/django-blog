@@ -1,5 +1,8 @@
 from django.shortcuts import render
+from .models import Category, Post, Tag
 
-# Create your views here.
+
 def index(request):
-    return render(request, 'blog/index.html')
+    post_list = Post.objects.all()
+    category_list = Category.objects.all()
+    return render(request, 'blog/index.html', locals())

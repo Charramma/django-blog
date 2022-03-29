@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 导入bulma -->
+    <link rel="stylesheet" href="{% static 'users/css/bulma.css' %}">
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+
+</head>
+<body>
+<!-- 导航条 -->
+<div class="pt-6" style="margin-top: 30px;">
+    <nav class="navbar is-dark container" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="https://bulma.io">
+                <img src="{% static 'users/image/logo.png' %}" width="112" height="28">
+            </a>
+
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+               data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                {% block navbar-start %}
+                    <a class="navbar-item" href="/">
+                        主页
+                    </a>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                            博客分类
+                        </a>
+                        <div class="navbar-dropdown">
+{#                            {% get_category_list as category_list %}#}
+                            {% for category in category_list %}
+                                <a class="navbar-item">
+                                    {{ category.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endblock %}
+            </div>
+
+            <div class="navbar-end">
+                {% block navbar-end %}
+                    <div class="navbar-item">
+                        {# 判断是否登录 #}
+                        {% if user.is_authenticated %}
+                            <div class="buttons">
+                                <a class="button is-primary" href="{% url 'users:user_profile' %}" target="_blank">
+                                    <strong>{{ request.user.username }}</strong>
+                                </a>
+                                <a href="{% url 'users:logout' %}" class="button is-primary">注销登录</a>
+                            </div>
+
+                        {% else %}
+                            <div class="buttons">
+                                <!-- target="_blank"  打开新页面 -->
+                                <a class="button is-light" href="{% url 'users:login' %}" target="_blank">
+                                    登录
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endblock %}
+            </div>
+        </div>
+    </nav>
+</div>
+</body>
+</html>
