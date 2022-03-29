@@ -2,9 +2,9 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.backends import ModelBackend   # django默认身份验证后端
-from .forms import LoginForm, ForgetForm, ModifyPwdForm
+from .forms import LoginForm, ForgetForm, ModifyPwdForm, ModifyUserForm, ModifyUserProfileForm
 from django.db.models import Q
-from .models import EmailVerifyRecord
+from .models import EmailVerifyRecord, UserProfile
 from django.utils import timezone
 import datetime
 from utils.email_send import send_resetpwd_mail
@@ -72,6 +72,7 @@ def logout_view(request):
 
 
 def reset_pwd(request, code):
+    """ 重置密码 """
     record = EmailVerifyRecord.objects.get(code=code)
     # 判断是否在一个小时内点击链接
     if timezone.now()-record.ge_date < datetime.timedelta(hours=1):
@@ -92,8 +93,70 @@ def reset_pwd(request, code):
         return HttpResponse('链接超时！')
 
 
+@login_required(login_url='users:login')
+def reset_pwd_inner(request):
+    """ 登录后在个人主页重置密码 """
+    user = User.objects.get(id=request.user.id)
+    if request.method != 'POST':
+        form = ModifyPwdForm()
+        return render(request, 'users/reset_pwd.html', {'form': form})
+    else:
+        form = ModifyPwdForm(request.POST)
+        if form.is_valid():
+            user.password = make_password(form.cleaned_data.get('password'))
+            user.save()
+            return HttpResponse('密码修改成功！')
+        else:
+            return HttpResponse('密码修改失败！')
+
+
+
+
 # 如果没有登录，跳转到登录界面
 @login_required(login_url='users:login')
 def user_profile(request):
+    """ 用户信息展示 """
     user = User.objects.get(username=request.user)
     return render(request, 'users/user_profile.html', {'user': user})
+
+@login_required(login_url='users:login')
+def editor_users(request):
+    """ 修改用户信息 """
+    user = User.objects.get(id=request.user.id)
+
+    if request.method == 'POST':
+        try:
+            # 如果userprofile存在
+            user_profile = user.userprofile
+            # 获取表单数据
+            user_form = ModifyUserForm(request.POST, instance=user)
+            userprofile_form = ModifyUserProfileForm(request.POST, request.FILES, instance=user_profile)
+            # 保存
+            if user_form.is_valid() and userprofile_form.is_valid():
+                user_form.save()
+                userprofile_form.save()
+                # 转到个人信息展示页面
+                return redirect('users:user_profile')
+        except UserProfile.DoesNotExist:
+            # 该用户在userprofile表中还没有对应的数据
+
+            # 获取表单信息
+            user_form = ModifyUserForm(request.POST, instance=user)
+            userprofile_form = ModifyUserProfileForm(request.POST, request.FILES)
+            # 保存
+            if user_form.is_valid() and userprofile_form.is_valid():
+                user_form.save()
+                # commit=False 先不保存，放在内存中，然后再重新给指定字段赋值
+                new_userprofile = userprofile_form.save(commit=False)
+                new_userprofile.owner = request.user
+                new_userprofile.save()
+                return redirect('users:user_profile')
+    else:
+        try:
+            user_profile = user.userprofile
+            user_form = ModifyUserForm(instance=user)
+            userprofile_form = ModifyUserProfileForm(instance=user_profile)
+        except UserProfile.DoesNotExist:
+            user_form = ModifyUserForm(instance=user)
+            userprofile_form = ModifyUserProfileForm()
+    return render(request, 'users/editor_users.html', locals())

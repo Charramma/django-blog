@@ -19,12 +19,12 @@
     <link rel="stylesheet" href="{% static 'users/css/style.css' %}">
 
     <!-- 引入阿里图标库 -->
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_3273978_wzf0y88g7xg.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_3273978_pdfyak4r29.css">
 </head>
 
 <body>
     <!-- 头部导航 -->
-    <nav class="navbar" style="background-image: url({% static 'users/image/escheresque_@2X.png' %});">
+    <nav class="navbar is-dark">
         <div class="container">
             <!-- logo -->
             <div class="navbar-brand">
@@ -45,9 +45,9 @@
                         <!-- 头像 -->
                         <figure class="image is-24x24 mr-2">
                             {% if user.userprofile.image %}
-                            <img class=" is-rounded" src="{{ MEDIA_URL }}{{ user.userprofile.image }}" alt="" srcset="">
+                            <img class="is-rounded" src="{{ MEDIA_URL }}{{ user.userprofile.image }}" alt="" srcset="">
                             {% else %}
-                            <img class=" is-rounded" src="{% static 'users/image/default.png' %}" alt="" srcset="">
+                            <img class="is-rounded" src="{% static 'users/image/default.png' %}" alt="" srcset="">
                             {% endif %}
                         </figure>
                     </div>
@@ -57,11 +57,12 @@
                             <div class="dropdown-trigger">
                                 <a>
                                     {% if user.userprofile.nick_name %}
-                                    <span class="has-text-grey-dark is-size-5">{{ user.userprofile.nick_name }}</span>
+                                    <span class="has-text-light is-size-5">{{ user.userprofile.nick_name }}</span>
                                     {% else %}
-                                    <span class="has-text-grey-dark is-size-5">{{ user.username }}</span>
+                                    <span class="has-text-light is-size-5">{{ user.username }}</span>
                                     {% endif %}
                                 </a>
+                                <span class="iconfont icon-unfold"></span>
                             </div>
                             <div class="dropdown-menu" id="dropdown-menu2" role="menu">
                                 <div class="dropdown-content is-shadowless">
@@ -72,9 +73,15 @@
                                         </a>
                                     </div>
                                     <div class="dropdown-item">
-                                        <a class=" has-text-grey-dark" href="">
+                                        <a class=" has-text-grey-dark" href="{% url 'users:editor_users' %}">
                                             <span class="iconfont icon-setup_fill"></span>&nbsp;&nbsp;
                                             修改账户信息
+                                        </a>
+                                    </div>
+                                    <div class="dropdown-item">
+                                        <a class=" has-text-grey-dark" href="{% url 'users:reset_pwd_inner' %}">
+                                            <span class="iconfont icon-icon-test1"></span>&nbsp;&nbsp;
+                                            重置密码
                                         </a>
                                     </div>
                                     <hr class="dropdown-divider">
@@ -138,7 +145,7 @@
                         <div class="tabs">
                             <ul>
                                 {% block title %}
-                                <li class="is-active"><a>账号信息</a></li>
+                                <li class="is-active is-size-5 has-text-weight-bold"><span>用户信息</span></li>
                                 {% endblock %}
                             </ul>
                         </div>
