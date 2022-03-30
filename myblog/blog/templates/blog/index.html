@@ -2,3 +2,17 @@
 {% block title %}
     Charramma的个人博客
 {% endblock %}
+
+{% block left %}
+    {% for post in post_list %}
+    <div class="box">
+        <h1 class="is-size-5  has-text-weight-bold"><a href="{% url 'blog:post_detail' post.id %}">{{ post.title }}</a></h1>
+        <div class="is-size-7 has-text-grey-light pt-1 pb-1">
+            <span>发布日期：{{ post.add_date }}</span>
+        </div>
+        <!-- 显示博客描述 -->
+        <!-- truncatechars 控制文章描述显示字数，只显示50个字节 -->
+        <p class="mt-3 is-size-6">&nbsp;&nbsp;{{ post.desc|truncatechars:50 }}</p>
+    </div>
+    {% endfor %}
+{% endblock %}

@@ -1,88 +1,157 @@
 <!DOCTYPE html>
-{% load static %}
+{% load static category %}
+
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <!-- 导入bulma -->
     <link rel="stylesheet" href="{% static 'users/css/bulma.css' %}">
+    <!-- jquery -->
+    <script src="{% static 'users/js/jquery-3.6.0.min.js' %}"></script>
+
+    <!-- 引入阿里图标库 -->
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_3273978_pdfyak4r29.css">
     <title>
         {% block title %}
         {% endblock %}
     </title>
 
 </head>
+
 <body>
-<!-- 导航条 -->
-<div class="pt-6" style="margin-top: 30px;">
-    <nav class="navbar is-dark container" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="https://bulma.io">
-                <img src="{% static 'users/image/logo.png' %}" width="112" height="28">
-            </a>
+    <!-- 导航条 -->
+    <div class="pt-6" style="margin-top: 30px;">
+        <nav class="navbar is-black container" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="https://bulma.io">
+                    <img src="{% static 'users/image/logo.png' %}" width="112" height="28">
+                </a>
 
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-               data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                    data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
 
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                {% block navbar-start %}
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    {% block navbar-start %}
                     <a class="navbar-item" href="/">
-                        主页
+                        博客主页
                     </a>
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">
                             博客分类
                         </a>
                         <div class="navbar-dropdown">
-{#                            {% get_category_list as category_list %}#}
+                             {% get_category_list as category_list %}
                             {% for category in category_list %}
-                                <a class="navbar-item">
-                                    {{ category.name }}
-                                </a>
+                            <a class="navbar-item">
+                                {{ category.name }}
+                            </a>
                             {% endfor %}
                         </div>
                     </div>
-                {% endblock %}
-            </div>
+                    {% endblock %}
+                </div>
 
-            <div class="navbar-end">
-                {% block navbar-end %}
+                <div class="navbar-end">
+                    {% block navbar-end %}
+                    <!-- 判断是否登录 -->
+                    {% if user.is_authenticated %}
                     <div class="navbar-item">
-                        {# 判断是否登录 #}
-                        {% if user.is_authenticated %}
-                            <div class="narbar-item">
-                                <figure class="image is-24x24 mr-2">
-                                    {% if user.userprofile.image %}
-                                    <img class="is-rounded" src="{{ MEDIA_URL }}{{ user.userprofile.image }}" alt="" srcset="">
-                                    {% else %}
-                                    <img class="is-rounded" src="{% static 'users/image/default.png' %}" alt="" srcset="">
-                                    {% endif %}
-                                </figure>
-                                <a class="button is-primary" href="{% url 'users:user_profile' %}" target="_blank">
-{#                                    <strong>{{ request.user.username }}</strong>#}
-                                    <span class="has-text-light is-size-5">{{ user.username }}</span>
-                                </a>
-                                <a href="{% url 'users:logout' %}" class="button is-primary">注销登录</a>
+                        <!-- 头像 -->
+                        <div class="narbar-item">
+                            <figure class="image is-24x24 mr-2">
+                                {% if user.userprofile.image %}
+                                <img class="is-rounded" src="{{ MEDIA_URL }}{{ user.userprofile.image }}" alt=""
+                                    srcset="">
+                                {% else %}
+                                <img class="is-rounded" src="{% static 'users/image/default.png' %}" alt="" srcset="">
+                                {% endif %}
+                            </figure>
+                        </div>
+                        <!-- 用户名及下拉菜单 -->
+                        <div class="navbar-item">
+                            <div class="dropdown is-hoverable">
+                                <div class="dropdown-trigger">
+                                    <a>
+                                        <span class="has-text-light is-size-6">{{ user.username }}</span>
+                                    </a>
+                                    <span class="iconfont icon-unfold"></span>
+                                </div>
+                                <div class="dropdown-menu" id="dropdown-menu2" role="menu">
+                                    <div class="dropdown-content is-shadowless">
+                                        <div class="dropdown-item">
+                                            <a class="has-text-grey-dark" href="{% url 'users:user_profile' %}">
+                                                <span class="iconfont icon-icon-test"></span>&nbsp;&nbsp;
+                                                个人中心
+                                            </a>
+                                        </div>
+                                        <hr class="dropdown-divider">
+                                        <div class="dropdown-item">
+                                            <a class=" has-text-grey-dark" href="{% url 'users:logout' %}">
+                                                <span class="iconfont icon-undo"></span>&nbsp;&nbsp;
+                                                注销登录
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
-                        {% else %}
-                            <div class="buttons">
-                                <!-- target="_blank"  打开新页面 -->
-                                <a class="button is-light" href="{% url 'users:login' %}" target="_blank">
-                                    登录
-                                </a>
-                            </div>
-                        {% endif %}
+                        </div>
                     </div>
-                {% endblock %}
+                    {% else %}
+                    <!-- 登录按钮 -->
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <!-- target="_blank"  打开新页面 -->
+                            <a class="button is-dark is-rounded" href="{% url 'users:login' %}" target="_blank"
+                                title="点这里，登录滴干活">
+                                <span class="iconfont icon-icon-test" style="font-size: 24px"></span>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- 主要内容显示部分 -->
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <!-- 左侧 -->
+                <div class="column is-8">
+                    {% block left %}
+                        左侧
+                    {% endblock %}
+                </div>
+
+                <!-- 右侧 -->
+                <div class="column is-4">
+                    {% block right %}
+                    右侧
+                    {% endblock %}
+                </div>
             </div>
         </div>
-    </nav>
-</div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer container has-narbar-fixed-bottom">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
+                <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+                is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+            </p>
+        </div>
+    </footer>
 </body>
+
 </html>
