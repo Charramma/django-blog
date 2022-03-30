@@ -55,9 +55,17 @@
                     <div class="navbar-item">
                         {# 判断是否登录 #}
                         {% if user.is_authenticated %}
-                            <div class="buttons">
+                            <div class="narbar-item">
+                                <figure class="image is-24x24 mr-2">
+                                    {% if user.userprofile.image %}
+                                    <img class="is-rounded" src="{{ MEDIA_URL }}{{ user.userprofile.image }}" alt="" srcset="">
+                                    {% else %}
+                                    <img class="is-rounded" src="{% static 'users/image/default.png' %}" alt="" srcset="">
+                                    {% endif %}
+                                </figure>
                                 <a class="button is-primary" href="{% url 'users:user_profile' %}" target="_blank">
-                                    <strong>{{ request.user.username }}</strong>
+{#                                    <strong>{{ request.user.username }}</strong>#}
+                                    <span class="has-text-light is-size-5">{{ user.username }}</span>
                                 </a>
                                 <a href="{% url 'users:logout' %}" class="button is-primary">注销登录</a>
                             </div>
