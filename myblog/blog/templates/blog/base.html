@@ -11,7 +11,7 @@
     <script src="{% static 'users/js/jquery-3.6.0.min.js' %}"></script>
 
     <!-- 引入阿里图标库 -->
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_3273978_g8fru5lvoja.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_3273978_ic93w3ru5jj.css">
     <title>
         {% block title %}
         {% endblock %}
@@ -91,6 +91,12 @@
                                                 <a class="has-text-grey-dark" href="{% url 'users:user_profile' %}">
                                                     <span class="iconfont icon-icon-test"></span>&nbsp;&nbsp;
                                                     个人中心
+                                                </a>
+                                            </div>
+                                            <div class="dropdown-item">
+                                                <a class="has-text-grey-dark" href="{% url 'admin:index' %}">
+                                                    <span class="iconfont icon-Admin-01"></span>&nbsp;&nbsp;
+                                                    管理后台
                                                 </a>
                                             </div>
                                             <hr class="dropdown-divider">
