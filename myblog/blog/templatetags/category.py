@@ -28,3 +28,10 @@ def get_sidebar_list():
 def get_new_post():
     """ 获取最新文章 """
     return Post.objects.order_by('-mod_date')[:5]
+
+
+@register.simple_tag
+def get_archives():
+    """文章归档"""
+    # 按月份归档
+    return Post.objects.dates('add_date', 'month', order='DESC')[:8]

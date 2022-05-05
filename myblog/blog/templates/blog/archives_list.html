@@ -1,0 +1,18 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    {{ year }}年{{ month }}月的文章
+{% endblock %}
+
+{% block right %}
+    <div class="box is-shadowless is-radiusless">
+        每月归档，{{ year }}年{{ month }}月
+        <div class="tags has-addons is-pulled-right">
+            <span class="tag">共</span>
+            <span class="tag is-primary">{{ post_list.count }}篇</span>
+        </div>
+    </div>
+
+    {# 继承模板中原有内容 #}
+    {{ block.super }}
+{% endblock %}

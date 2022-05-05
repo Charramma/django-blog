@@ -45,3 +45,16 @@ def search(request):
     }
     # 和首页保持一致
     return render(request, 'blog/index.html', content)
+
+
+def archives(request, year, month):
+    """ 文章归档视图 """
+    # 按年和月筛选文章
+    post_list = Post.objects.filter(add_date__year=year, add_date__month=month)
+
+    context = {
+        "year": year,
+        "month": month,
+        "post_list": post_list
+    }
+    return render(request, 'blog/archives_list.html', context=context)
