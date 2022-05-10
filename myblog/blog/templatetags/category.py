@@ -34,4 +34,10 @@ def get_new_post():
 def get_archives():
     """文章归档"""
     # 按月份归档
-    return Post.objects.dates('add_date', 'month', order='DESC')[:8]
+    return Post.objects.dates('add_date', 'month', order='DESC')[:12]
+
+
+@register.simple_tag
+def get_hot_post():
+    """ 按浏览量排名 """
+    return Post.objects.order_by('-pv')[:10]

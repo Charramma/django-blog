@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Post, Tag
-from django.db.models import Q
+from django.db.models import Q, F
 from django.core.paginator import Paginator
 
 
@@ -20,6 +20,9 @@ def post_detail(request, post_id):
     """ 博客详情页视图 """
     # post_id对应的博客模型对象
     post = get_object_or_404(Post, id=post_id)
+
+    # 刷新一次浏览量就加一
+    Post.objects.filter(id=post_id).update(pv=F('pv')+1)
 
     # 前一篇的博文 id__lt=post_id  id>post_id last()查询最后一个对象
     prev_post = Post.objects.filter(id__lt=post_id).last()

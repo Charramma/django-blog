@@ -38,6 +38,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='文章分类')
     content = models.TextField(verbose_name="文章详情")
     tags = models.ForeignKey(Tag, blank=True, null=True, on_delete=models.CASCADE, verbose_name='文章标签')
+    pv = models.IntegerField(default=0, verbose_name="浏览量")
     add_date = models.DateField(auto_now=True, verbose_name="添加日期")
     mod_date = models.DateField(auto_now=True, verbose_name="修改日期")
 
