@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, HttpResponse
 from .models import Category, Post, Tag
 from django.db.models import Q, F
 from django.core.paginator import Paginator
@@ -61,3 +61,7 @@ def archives(request, year, month):
         "post_list": post_list
     }
     return render(request, 'blog/archives_list.html', context=context)
+
+
+def add_post(request):
+    return HttpResponse("新文章")
