@@ -64,4 +64,4 @@ def archives(request, year, month):
 
 
 def add_post(request):
-    return HttpResponse("新文章")
+    return render(request, 'blog/add_post.html')

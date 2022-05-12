@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.loader import render_to_string
-
+# from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 class Category(models.Model):
     """ 博客分类模型 """
@@ -36,7 +37,9 @@ class Post(models.Model):
     title = models.CharField(max_length=60, verbose_name="文章标题")
     desc = models.TextField(max_length=200, blank=True, default='', verbose_name='文章描述')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='文章分类')
-    content = models.TextField(verbose_name="文章详情")
+    # content = models.TextField(verbose_name="文章详情")
+    # content = RichTextField(verbose_name="文章详情")
+    content = RichTextUploadingField(verbose_name="文章详情")
     tags = models.ForeignKey(Tag, blank=True, null=True, on_delete=models.CASCADE, verbose_name='文章标签')
     pv = models.IntegerField(default=0, verbose_name="浏览量")
     add_date = models.DateField(auto_now=True, verbose_name="添加日期")
